@@ -1,6 +1,6 @@
 import {useState} from 'react'
 
-import styles from './index.module.css'
+import styles from './index.module.scss'
 
 interface IProps{
     isShow: boolean,
@@ -19,7 +19,7 @@ const Login = (props: IProps) => {
 
     }
     const handlePhoneChange = ()=>{
-        
+
     }
     const handleVerifyChange = ()=>{
 
@@ -48,7 +48,7 @@ const Login = (props: IProps) => {
                     </div>
                     <div className={styles.loginBtn} onClick={handleLogin}>登录</div>
                     <div className={styles.otherLogin} onClick={handleOAthGithub}>使用Github 登录</div>
-                    <div className={styles.loginPrivacy}>注册登录即表示同意<a href="https://moco.imooc.com/privacy.html" target="_blank"></a></div>
+                    <div className={styles.loginPrivacy}><a href="https://moco.imooc.com/privacy.html" target="_blank">注册登录即表示同意</a></div>
                 </div>
             </div> 
         : null
