@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {ChangeEvent, useState} from 'react'
 
 import styles from './index.module.scss'
 
@@ -12,17 +12,17 @@ const Login = (props: IProps) => {
         phone: '',
         verify: ''
     })
-    console.log(form.phone, form.verify)
-    const {isShow = false} = props
+    const {isShow = false, onClose} = props
 
     const handleClose = ()=>{
-
+        onClose()
     }
-    const handlePhoneChange = ()=>{
-
-    }
-    const handleVerifyChange = ()=>{
-
+    const handleFormChange = (e:ChangeEvent<HTMLInputElement>)=>{
+        let {name, value} = e.target
+        setForm({
+            ...form,
+            [name]: value
+        })
     }
     const handleGetVerifyCode = ()=>{
 
@@ -41,9 +41,9 @@ const Login = (props: IProps) => {
                         <div>手机号登录</div>
                         <div className={styles.close} onClick={handleClose}>x</div>
                     </div>
-                    <input name="phone" type="text" placeholder='请输入手机号' value={form.phone} onChange={handlePhoneChange}/>
+                    <input name="phone" type="text" placeholder='请输入手机号' value={form.phone} onChange={handleFormChange}/>
                     <div className={styles.verifyCodeArea}>
-                        <input name="verify" type="text" placeholder='请输入验证码' value={form.verify} onChange={handleVerifyChange}/>
+                        <input name="verify" type="text" placeholder='请输入验证码' value={form.verify} onChange={handleFormChange}/>
                         <span className={styles.verifyCode} onClick={handleGetVerifyCode}>获取验证码</span>
                     </div>
                     <div className={styles.loginBtn} onClick={handleLogin}>登录</div>
