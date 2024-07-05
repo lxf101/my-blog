@@ -11,6 +11,7 @@ interface IProps{
 
 const Login = (props: IProps) => {
     const [isVerifyCodeShow, setIsVerifyCodeShow] = useState(false)
+    const [isRepeatClick, setIsRepeatClick] = useState(false)
     const [form, setForm] = useState({
         phone: '',
         verify: ''
@@ -34,20 +35,25 @@ const Login = (props: IProps) => {
             message.warning('请输入手机号')
             return;
         }
-        
-        request.post("/api/users", {
-            to: form.phone,
-            templateId: 1
-        }).then(res => {
-            if(res.code === 0){
-                console.log('res======', res)
-            }else {
-                message.error(res.msg || '未知错误')
-            }
-        }).catch(err => {
-            console.log('error=======', err)
-        })
-        
+        if(!isRepeatClick){
+            setIsRepeatClick(true)
+            request.post("/api/users", {
+                to: form.phone,
+                templateId: 1
+            }).then(res => {
+                if(res.code === 0){
+                    console.log('res======', res)
+                    setIsVerifyCodeShow(true)
+                    setIsRepeatClick(false)
+                }else {
+                    message.error(res.msg || '未知错误')
+                    setIsRepeatClick(false)
+                }
+            }).catch(err => {
+                setIsRepeatClick(false)
+                console.log('error=======', err)
+            })
+        }
     }
     const hideCountDown = ()=>{
         setIsVerifyCodeShow(false)

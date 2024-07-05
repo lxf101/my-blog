@@ -23,6 +23,8 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse)=>{
         to,
         templateId,
         appId,
+        reqId: "abc123",
+        subAppend: "8888",
         datas: [verifyCode, expireMinute]
     }, {
         headers: {
@@ -31,6 +33,8 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse)=>{
     })
 
     console.log('====route.ts=====response==', response)
+
+    const session = getIronSession(req, res, { password: "...", cookieName: "..." });
 
     try{
         return NextResponse.json({
