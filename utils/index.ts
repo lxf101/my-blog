@@ -1,39 +1,23 @@
-interface ICookieInfo{
-    id: number;
-    nickname: string;
-    avatar: string;
-}
+import { cookies } from "next/headers";
 
-export const setCookie = (cookies: any, {id, nickname, avatar}: ICookieInfo) => {
+export const setCookie = (key: string, value: any) => {
     // 登录失效 24h
     const expires = new Date(Date.now() + 24*60*60*1000)
     const path = '/'
-    cookies.set('userId', id, {
-        path,
-        expires
-    })
-    cookies.set('nickname', nickname, {
-        path,
-        expires
-    })
-    cookies.set('avatar', avatar, {
+    cookies().set(key, value, {
         path,
         expires
     })
 }
 
-export const clearCookie = (cookies: any) => {
+export const getCookie = (key: string) => {
+    return cookies().get(key)?.value
+}
+
+export const clearCookie = (key:string) => {
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
     const path = '/'
-    cookies.set('userId', '', {
-        path,
-        expires
-    })
-    cookies.set('nickname', '', {
-        path,
-        expires
-    })
-    cookies.set('avatar', '', {
+    cookies().set(key, '', {
         path,
         expires
     })

@@ -9,7 +9,6 @@ import request from '../../../../service/fetch'
 import {ironOptions} from '../../../../config'
 import {ISession} from '@/app/api/index'
 
-
 export const POST = async (req: NextApiRequest, res: NextApiResponse)=>{
     let {to, templateId} = await req.json()
     

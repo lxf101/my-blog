@@ -1,15 +1,18 @@
 import {ChangeEvent, useState} from 'react'
+import { observer } from 'mobx-react-lite';
 import {message} from 'antd'
 
 import request from '../../../service/fetch'
 import styles from './index.module.scss'
 import CountDown from '../CountDown'
+import {useStore} from '../../../store'
 interface IProps{
     isShow: boolean,
     onClose: Function
 }
 
 const Login = (props: IProps) => {
+    const store = useStore()
     const [isVerifyCodeShow, setIsVerifyCodeShow] = useState(false)
     const [isRepeatClick, setIsRepeatClick] = useState(false)
     const [form, setForm] = useState({
@@ -58,6 +61,7 @@ const Login = (props: IProps) => {
     const hideCountDown = ()=>{
         setIsVerifyCodeShow(false)
     }
+    // 登录
     const handleLogin = ()=>{
         if(form.phone.trim() === ''){
             message.error('请输入手机号')
@@ -74,6 +78,7 @@ const Login = (props: IProps) => {
             "identity_type": "phone"
         }).then(res => {
             if(res.code === 0){
+                store.user.setUserInfo(res.data)
                 // 登录成功
                 handleClose()
             }else{
@@ -110,4 +115,4 @@ const Login = (props: IProps) => {
     )
 }
 
-export default Login
+export default observer(Login)

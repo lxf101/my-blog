@@ -1,19 +1,17 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import { NextResponse } from "next/server"
-import {Cookie} from 'next-cookie'
 
 import {prepareConnection} from '../../../../../db'
 import {User, UserAuth} from "../../../../../db/entity"
-import { setCookie } from '../../../../../utils/index';
+import { setCookie } from '../../../../../utils';
 
 export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-    const cookies = Cookie.fromApiRoute(req, res)
     let {phone, verify, identity_type = 'phone'} = await req.json()
     const db = await prepareConnection()
     const userRepo = db.getRepository(User)
     const userAuthRepo = db.getRepository(UserAuth)
 
-    console.log("===userRepo===", await userRepo.find())
+    // console.log("===userRepo===", await userRepo.find())
     // 判断输入的验证码和session中的验证码是否相同
     // 这里，假设验证码的相同
     // 在user_auths表中查找identity_type是否有记录
@@ -31,7 +29,12 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
         // session.nickname = nickname;
         // session.avatar = avatar;
         // await session.save();
-        // setCookie(cookies, {id, nickname, avatar})
+
+        // 设置 cookie
+        setCookie('userId', id)
+        setCookie('nickname', nickname)
+        setCookie('avatar', avatar)
+        
         return NextResponse.json({
             code: 0,
             msg: "登录成功",
@@ -62,7 +65,12 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
         // session.nickname = nickname;
         // session.avatar = avatar;
         // await session.save();
-        // setCookie(cookies, {id, nickname, avatar})
+
+        // 设置 cookie
+        setCookie('userId', id)
+        setCookie('nickname', nickname)
+        setCookie('avatar', avatar)
+        
         return NextResponse.json({
             code: 0,
             msg: "登录成功",
