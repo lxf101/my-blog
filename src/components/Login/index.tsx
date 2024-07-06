@@ -59,7 +59,27 @@ const Login = (props: IProps) => {
         setIsVerifyCodeShow(false)
     }
     const handleLogin = ()=>{
+        if(form.phone.trim() === ''){
+            message.error('请输入手机号')
+            return;
+        }
+        if(form.verify.trim() === ''){
+            message.error('请输入验证码')
+            return;
+        }
 
+        // 请求后端接口，登录
+        request.post("/api/users/login", {
+            ...form,
+            "identity_type": "phone"
+        }).then(res => {
+            if(res.code === 0){
+                // 登录成功
+                handleClose()
+            }else{
+                message.error(res.msg || '未知错误')
+            }
+        })
     }
     const handleOAthGithub = ()=>{
 

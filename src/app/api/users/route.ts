@@ -7,11 +7,16 @@ import {getIronSession} from 'iron-session'
 
 import request from '../../../../service/fetch'
 import {ironOptions} from '../../../../config'
+import {ISession} from '@/app/api/index'
+
 
 export const POST = async (req: NextApiRequest, res: NextApiResponse)=>{
     let {to, templateId} = await req.json()
-    console.log('==========', to, templateId)
     
+    let appId = process.env.APPId
+    let AccountId = process.env.ACCOUNTId
+    let AuthToken = process.env.AUTHTOKEN
+
     const NowDate = format(new Date(), "yyyyMMddHHmmss")
     const SigParameter = md5(`${AccountId}${AuthToken}${NowDate}`)
     const Authorization = encode(`${AccountId}:${NowDate}`)
@@ -34,16 +39,22 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse)=>{
 
     console.log('====route.ts=====response==', response)
 
-    const session = getIronSession(req, res, { password: "...", cookieName: "..." });
+    const session:ISession = getIronSession(req, res, ironOptions);
 
-    try{
+    const {statusCode, statusMsg} = response as any
+    if(statusCode === '000000'){
+        // 把验证码存到session中
+        session.verifyCode = verifyCode
+        await session.save();
+
         return NextResponse.json({
             code: 0,
-            message: 'ok'
+            msg: ''
         }, {status: 200})
-    }catch(error){
+    } else {
         return NextResponse.json({
-            message: 'error'
-        }, {status: 500})
+            code: statusCode,
+            msg: statusMsg
+        }, {status: 200})
     }
 }
